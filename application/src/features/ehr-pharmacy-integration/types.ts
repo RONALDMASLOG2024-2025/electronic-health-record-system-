@@ -53,3 +53,8 @@ export interface IntegrationKpis {
   pendingMappings: number;
   retryQueue: number;
 }
+
+export interface MappingSuggestion {
+  sourceCode: string;
+  candidates: { targetId: string; confidence: number; label: string }[];
+}

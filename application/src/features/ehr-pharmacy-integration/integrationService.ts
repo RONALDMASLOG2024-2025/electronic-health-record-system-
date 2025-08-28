@@ -1,6 +1,6 @@
 // In-memory offline integration service simulating core functions.
 // This layer can later be swapped with Supabase/Postgres persistence.
-import { IntegrationJob, SyncEvent, MappingRecord, IntegrationKpis, ManualSyncResult } from './types';
+import { IntegrationJob, SyncEvent, MappingRecord, IntegrationKpis, ManualSyncResult, MappingSuggestion } from './types';
 import { mockJobs, mockEvents, mockMappings, mockKpis } from './mocks';
 
 // Internal mutable state (offline DB)
@@ -69,6 +69,24 @@ export function ingestEvent(p: IngestPayload): SyncEvent {
   return evt;
 }
 
+export function ingestFailureEvent(p: IngestPayload & { error: string }): SyncEvent {
+  const evt: SyncEvent = {
+    id: crypto.randomUUID(),
+    correlationId: crypto.randomUUID(),
+    direction: p.direction,
+    kind: p.kind,
+    status: 'error',
+    createdAt: nowIso(),
+    payload: p.payload,
+    error: p.error,
+  };
+  events = [evt, ...events].slice(0, 200);
+  scheduleRetry(evt.id);
+  emitEvent(evt);
+  recalcKpis();
+  return evt;
+}
+
 export function streamEvents(onEvent: (e: SyncEvent) => void) {
   eventListeners.add(onEvent);
   return () => eventListeners.delete(onEvent);
@@ -81,6 +99,19 @@ export function getMappings() { return mappings; }
 export function resolveMapping(id: string, targetId: string) {
   mappings = mappings.map(m => m.id === id ? { ...m, targetId, status: 'resolved', updatedAt: nowIso() } : m);
   recalcKpis();
+}
+
+export function getMappingSuggestions(sourceCode: string): MappingSuggestion {
+  // Dummy scoring
+  const base = sourceCode.replace(/[^0-9]/g, '').slice(0,5) || '00000';
+  return {
+    sourceCode,
+    candidates: [
+      { targetId: 'DRUG-'+base+'A', confidence: 0.93, label: 'Generic Base A '+base },
+      { targetId: 'DRUG-'+base+'B', confidence: 0.81, label: 'Brand Alt '+base },
+      { targetId: 'DRUG-'+base+'C', confidence: 0.67, label: 'Legacy Code '+base },
+    ],
+  };
 }
 
 export interface MedicationDiffResult {

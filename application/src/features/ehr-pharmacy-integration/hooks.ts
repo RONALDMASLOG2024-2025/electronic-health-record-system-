@@ -14,6 +14,8 @@ import {
   getRetryQueue,
   getKpis,
   ingestEvent,
+  ingestFailureEvent,
+  getMappingSuggestions,
 } from './integrationService';
 
 // Polling interval constants (ms) - adjust later
@@ -51,6 +53,15 @@ export function usePendingMappings() {
     setMappings([...getMappings()]);
   };
   return { mappings, resolve };
+}
+
+export function useMappingSuggestions(sourceCode?: string) {
+  const [suggestions, setSuggestions] = useState(() => sourceCode ? getMappingSuggestions(sourceCode) : null);
+  useEffect(() => {
+    if (!sourceCode) return;
+    setSuggestions(getMappingSuggestions(sourceCode));
+  }, [sourceCode]);
+  return { suggestions };
 }
 
 export function useKpis() {
@@ -105,4 +116,8 @@ export function useRetryQueue() {
 // Manual event injection (testing)
 export function useInjectEvent() {
   return (kind: string, direction: 'in' | 'out') => ingestEvent({ kind, direction, payload: {} });
+}
+
+export function useInjectFailureEvent() {
+  return (kind: string, direction: 'in' | 'out', error: string) => ingestFailureEvent({ kind, direction, payload: {}, error });
 }
