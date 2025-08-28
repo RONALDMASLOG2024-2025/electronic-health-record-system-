@@ -18,7 +18,7 @@ export const FEATURES: FeatureMeta[] = [
     title: "Prescription Error Detection",
     summary: "Automated checks to reduce adverse medication events.",
     icon: "/icons/prescription.svg",
-    route: "/(features)/prescription-errors",
+    route: "/prescription-errors",
     owner: "Group 1",
   },
   {
@@ -26,7 +26,7 @@ export const FEATURES: FeatureMeta[] = [
     title: "Inventory Management",
     summary: "Real-time stock, expirations & replenishment insights.",
     icon: "/icons/inventory.svg",
-    route: "/(features)/inventory-management",
+    route: "/inventory-management",
     owner: "Group 2",
   },
   {
@@ -34,7 +34,7 @@ export const FEATURES: FeatureMeta[] = [
     title: "Medication Non-Adherence Tracking",
     summary: "Monitor missed doses & trigger timely interventions.",
     icon: "/icons/adherence.svg",
-    route: "/(features)/medication-non-adherence",
+    route: "/medication-non-adherence",
     owner: "Group 3",
   },
   {
@@ -42,7 +42,7 @@ export const FEATURES: FeatureMeta[] = [
     title: "EHR–Pharmacy Integration (Cloud)",
     summary: "Secure bidirectional data exchange between systems.",
     icon: "/icons/integration.svg",
-    route: "/(features)/ehr-pharmacy-integration",
+    route: "/ehr-pharmacy-integration",
     owner: "Group 4",
   },
   {
@@ -50,7 +50,7 @@ export const FEATURES: FeatureMeta[] = [
     title: "Remote Patient Consultation",
     summary: "Virtual counseling & clarification for patients.",
     icon: "/icons/consultation.svg",
-    route: "/(features)/remote-consultation",
+    route: "/remote-consultation",
     owner: "Group 5",
   },
 ];

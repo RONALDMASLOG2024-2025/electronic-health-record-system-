@@ -7,7 +7,6 @@ import { Card } from "../../components/ui/card";
 import { Particles } from "../../components/visual/Particles";
 import Image from "next/image";
 import Link from "next/link";
-// @ts-expect-error: framer-motion has no type declarations in node_modules
 import { motion } from "framer-motion";
 import { FEATURES } from "@/config/features";
 
